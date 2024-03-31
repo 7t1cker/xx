@@ -12,7 +12,7 @@ services:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: test
     ports:
-      - "3307:3307"
+      - "3306:3306"
   swagger:
     image: swaggerapi/swagger-ui
     ports:
