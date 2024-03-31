@@ -1,0 +1,115 @@
+openapi: 3.0.0
+info:
+  title: :)
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+paths:
+  /register:
+    post:
+      summary: регистрация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        "201":
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Service error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /authorize:
+    post:
+      summary: авторизация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorizeRequest"
+      responses:
+        "200":
+          description: User authorized successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthorizeResponse"
+        "400":
+          description: Invalid email or password
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Service error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /feed:
+    get:
+      summary: проверка валидности токена
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Feed retrieved successfully
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    RegisterResponse:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        password_check_status:
+          type: string
+    AuthorizeRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    AuthorizeResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
